@@ -1,0 +1,63 @@
+--- /Makefile
++++ /Makefile
+@@ -293,6 +293,33 @@
+ 
+ Package/ffprobe-custom/description = $(Package/ffprobe/description)
+ 
++
++define Package/ffplay
++$(call Package/ffmpeg/Default)
++ SECTION:=multimedia
++ CATEGORY:=Multimedia
++ TITLE+= CLI media player 
++ DEPENDS+= +libffmpeg-full +sdl2
++ VARIANT:=full
++endef
++
++define Package/ffplay-custom
++$(call Package/ffplay/Default)
++ SECTION:=multimedia
++ CATEGORY:=Multimedia
++ TITLE+= CLI media player (custom)
++ DEPENDS+= @!ALL libffmpeg-custom sdl2
++ VARIANT:=custom
++endef
++
++define Package/ffplay/description
++$(call Package/ffmpeg/Default/description)
++ .
++ This package contains the FFplay command line tool.
++endef
++
++Package/ffplay-custom/description = $(Package/ffplay/description)
++
+ define Package/libffmpeg/Default
+ $(call Package/ffmpeg/Default)
+  SECTION:=libs
+@@ -716,6 +743,13 @@
+ 
+ Package/ffprobe-custom/install = $(Package/ffprobe/install)
+ 
++define Package/ffplay/install
++	$(INSTALL_DIR) $(1)/usr/bin
++	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ffplay $(1)/usr/bin/
++endef
++Package/ffplay-custom/install = $(Package/ffplay/install)
++
++
+ define Package/libffmpeg-custom/install
+ 	$(INSTALL_DIR) $(1)/usr/lib
+ 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{avcodec,avdevice,avformat,avutil}.so.* $(1)/usr/lib/
+@@ -745,10 +779,11 @@
+ 
+ $(eval $(call BuildPackage,ffmpeg))
+ $(eval $(call BuildPackage,ffprobe))
++$(eval $(call BuildPackage,ffplay))
+ $(eval $(call BuildPackage,ffmpeg-custom))
+ $(eval $(call BuildPackage,ffprobe-custom))
++$(eval $(call BuildPackage,ffplay-custom))
+ $(eval $(call BuildPackage,libffmpeg-audio-dec))
+ $(eval $(call BuildPackage,libffmpeg-full))
+ $(eval $(call BuildPackage,libffmpeg-mini))
+ $(eval $(call BuildPackage,libffmpeg-custom))
+-

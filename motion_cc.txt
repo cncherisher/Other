@@ -1,0 +1,46 @@
+wget http://www.codesourcery.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+
+
+./configure --host=arm-none-linux-gnueabi --prefix=${PWD}/_install 
+
+./configure --host=aarch64-openwrt-linux-musl --prefix=${PWD}/_install 
+
+./configure --host=aarch64-cortexa53-linux-gnu --prefix=${PWD}/_install 
+
+autoreconf -fiv
+
+echo "xorg_cv_malloc0_returns_null=yes" > arm-linux.cache
+--cache-file=arm-linux.cache
+
+ffmpeg:
+./configure --cross-prefix=aarch64-cortexa53-linux-gnu- --enable-cross-compile --target-os=linux --cc=aarch64-cortexa53-linux-gnu-gcc --arch=aarch64 --prefix=${PWD}/_install --enable-shared --enable-gpl --enable-nonfree --enable-ffmpeg  --enable-swscale --enable-pthreads --enable-postproc
+
+pulseaudio:
+--without-caps
+
+--disable-selinux 
+
+glib
+--cache-file=$ARCH-linux.cache
+echo glib_cv_stack_grows=no>>$ARCH-linux.cache
+echo glib_cv_uscore=no>>$ARCH-linux.cache
+
+
+motion
+./configure --host=aarch64-cortexa53-linux-gnu --prefix=${PWD}/_install --without-mariadb --without-pgsql --without-webp
+
+--libdir=/opt/FriendlyARM/toolchain/6.4-aarch64/aarch64-cortexa53-linux-gnu/lib
+
+LDFLAGS=-Wl,-rpath-link=/opt/FriendlyARM/toolchain/6.4-aarch64/aarch64-cortexa53-linux-gnu/lib
+
+--disable-mount 
+
+--without-webp
+
+清除残余配置文件
+dpkg -l | grep ^rc | awk '{print $2}' | sudo xargs dpkg -P
+
+git test 
+echo "ac_cv_iconv_omits_bom=yes" >> arm-linux.cache
+echo "ac_cv_fread_reads_directories=yes" >> arm-linux.cache
+echo "ac_cv_snprintf_returns_bogus=yes" >> arm-linux.cache
