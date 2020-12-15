@@ -1,0 +1,58 @@
+{
+  "inbounds":[
+	  {
+		"listen": "0.0.0.0",
+		"port": 443,
+		"protocol": "dokodemo-door",
+		"sniffing": {
+			"enabled": true,
+			"destOverride": [
+				"tls"
+			]
+		},
+		"settings": {
+			"address": "0.0.0.0",
+			"network": "tcp",
+			"followRedirect": false
+		}
+	},
+    {
+	  "listen":"127.0.0.1",
+	  "port":888,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": " ",
+            "flow":"xtls-rprx-direct",
+            "email": " "
+          }
+        ],
+        "decryption": "none",
+        "fallbacks": [
+          {
+			"dest": " "
+		  }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "xtls",
+        "xtlsSettings": {
+          "alpn": [
+            "http/1.1"
+          ],
+		  "tcpSettings": {
+            "acceptProxyProtocol": true
+          },
+          "certificates": [
+            {
+              "certificateFile": " ",
+              "keyFile": " "
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

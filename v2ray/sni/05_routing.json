@@ -1,0 +1,24 @@
+{
+	"routing": {
+		"strategy": "rules",
+		"settings": {
+			"domainStrategy": "AsIs",
+			"rules": [
+				{
+					"type": "field",
+					"domain": [
+						" "
+					],
+					"outboundTag": "mtp"
+				},
+				{
+					"type": "field",
+					"domain": [
+						" "
+					],
+					"outboundTag": "main"
+				}
+			]
+		}
+	}
+}

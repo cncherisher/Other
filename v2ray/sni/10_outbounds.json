@@ -1,0 +1,21 @@
+{
+    "outbounds": [
+		{
+            "protocol": "freedom"
+        },
+		{
+            "protocol": "freedom",
+            "settings": {
+                "redirect": "127.0.0.1:8443"
+            },
+			"tag": "mtp"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "redirect": "127.0.0.1:888"
+            },
+			"tag": "main"
+        }
+    ]
+}
