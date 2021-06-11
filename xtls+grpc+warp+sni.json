@@ -116,7 +116,7 @@
 				{
 					"type": "field",
 					"domain": [
-						"mtk7.co"
+						"your2.example.com"
 					],
 					"outboundTag": "main"
 				},
