@@ -1,0 +1,174 @@
+{
+  "log": {
+    "loglevel": "none"
+  },
+  "inbounds": [
+	{
+		"listen": "0.0.0.0",
+		"port": 2053,
+		"protocol": "dokodemo-door",
+		"sniffing": {
+			"enabled": true,
+			"destOverride": [
+				"tls"
+			]
+		},
+		"settings": {
+			"address": "0.0.0.0",
+			"network": "tcp",
+			"followRedirect": false
+		}
+	},
+	{
+		"listen": "0.0.0.0",
+		"port": 443,
+		"protocol": "dokodemo-door",
+		"sniffing": {
+			"enabled": true,
+			"destOverride": [
+				"tls"
+			]
+		},
+		"settings": {
+			"address": "0.0.0.0",
+			"network": "tcp",
+			"followRedirect": false
+		}
+	},
+    {
+	  "listen":"127.0.0.1",
+      "port": 888,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "xxx",
+            "flow": "xtls-rprx-direct"
+          }
+        ],
+        "decryption": "none",
+        "fallbacks": [
+			{
+				"dest": "/dev/shm/h11.sock"
+			},
+			{
+				"alpn": "h2",
+				"dest": "/dev/shm/h2c.sock"
+			}
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "xtls",
+        "xtlsSettings": {
+			"alpn": [
+				"h2",
+				"http/1.1"
+			],
+          "minVersion": "1.2",
+          "certificates": [
+            {
+			  "ocspStapling": 3600,
+              "certificateFile": "/usr/local/etc/xray/ssl/cert.pem",
+              "keyFile": "/usr/local/etc/xray/ssl/key.pem"
+            }
+          ]
+        }
+      }
+    },
+	{
+      "port": 2002,
+      "listen": "127.0.0.1",
+      "protocol": "trojan",
+      "settings": {
+        "clients": [
+          {
+            "password": "xxx" 
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "grpc",
+        "grpcSettings": {
+          "serviceName": "xxx" 
+        }
+      }
+    }
+  ],
+  "routing": {
+	"strategy": "rules",
+		"settings": {
+			"domainStrategy": "AsIs",
+			"rules": [
+				{
+				  "type": "field",
+				  "outboundTag": "IPv6_out",
+				  "domain": ["geosite:google","geosite:youtube"]
+				},
+				{
+					"type": "field",
+					"domain": [
+						"your.example.com"
+					],
+					"outboundTag": "mtp"
+				},
+				{
+					"type": "field",
+					"domain": [
+						"mtk7.co"
+					],
+					"outboundTag": "main"
+				},
+				{
+				      "type": "field",
+					  "outboundTag": "blocked",
+					  "domain": [
+						"geosite:category-ads-all",
+						"geosite:cn",
+						"geosite:private"
+						]
+				},
+				{
+				      "type": "field",
+					  "outboundTag": "blocked",
+					  "ip": [
+						"geoip:private",
+						"geoip:cn"
+						]
+				}
+			]
+		}
+	},
+        "outbounds": [
+		{
+            "protocol": "freedom"
+        },
+		{
+            "protocol": "freedom",
+            "settings": {
+                "redirect": "127.0.0.1:2083"
+            },
+			"tag": "mtp"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "redirect": "127.0.0.1:888"
+            },
+			"tag": "main"
+        },
+		{
+			"protocol": "blackhole",
+			"tag": "blocked"
+        },
+		{
+			"tag":"IPv6_out",
+			"protocol": "freedom",
+			"settings": {
+			"domainStrategy": "UseIPv6"
+			}
+		}
+    ]
+}
+
