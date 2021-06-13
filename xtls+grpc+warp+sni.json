@@ -85,8 +85,7 @@
           {
             "password": "xxx" 
           }
-        ],
-        "decryption": "none"
+        ]
       },
       "streamSettings": {
         "network": "grpc",
