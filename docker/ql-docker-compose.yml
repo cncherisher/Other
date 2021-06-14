@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  qinglong:
+    image: whyour/qinglong:latest
+    container_name: qinglong
+    restart: always
+    volumes:
+      - $PWD/ql/config:/ql/config
+      - $PWD/ql/log:/ql/log
+      - $PWD/ql/db:/ql/db
+    tty: true
+    ports:
+      - "15700:5700"
